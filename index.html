@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who Am I? Halloween</title>
+<meta name="theme-color" content="#15101f">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Who Am I?">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icono-192.png">
+<style>.bloqueado { display: none !important; }</style>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="carta.css">
+<style>
+:root {
+  color-scheme: dark;
+  --night: #15101f; --night-2: #1f1830; --night-3: #2a2140; --line: #3b3055;
+  --ink: #f1eaff; --muted: #a99ec4;
+  --pumpkin: #ff8a1f; --slime: #86dc47; --phantom: #b28bff; --gold: #e9c46a; --blood: #ff4d6d; --good: #5fe08a;
+  --display: "Creepster", "Fredoka", system-ui, sans-serif;
+  --body: "Fredoka", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45;
+  background:
+    radial-gradient(1000px 420px at 85% -10%, #3a2463 0%, transparent 60%),
+    radial-gradient(800px 380px at -10% 110%, #3b1a10 0%, transparent 60%),
+    var(--night);
+  background-attachment: fixed;
+  padding: env(safe-area-inset-top) 16px calc(32px + env(safe-area-inset-bottom));
+}
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.wrap { max-width: 980px; margin: 0 auto; }
+
+/* cabecera */
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 12px; }
+.brand { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; text-align: left; }
+.brand svg { width: 42px; height: 42px; flex: none; }
+.brand h1 { font-family: var(--display); font-weight: 400; font-size: clamp(1.7rem, 6vw, 2.4rem); line-height: .95; margin: 0; color: var(--pumpkin);
+  text-shadow: 0 2px 0 #6b2a00, 0 0 22px rgba(255,138,31,.35); letter-spacing: .02em; }
+.brand h1 span { color: var(--slime); text-shadow: 0 2px 0 #1b4a12; }
+.brand small { display: block; color: var(--muted); font-size: .8rem; }
+.icon-btn { border: 1px solid var(--line); background: var(--night-2); border-radius: 999px; padding: 8px 14px; font-weight: 600; color: var(--muted); }
+
+h2.sec { font-weight: 700; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.panel { background: var(--night-2); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: grid; gap: 22px; }
+.setup { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 820px) { .setup { grid-template-columns: 1fr; } }
+
+/* niveles */
+.niveles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.nv { border: 3px solid transparent; border-radius: 16px; padding: 12px; text-align: left; display: grid; gap: 2px; min-height: 92px; opacity: .45; transition: opacity .15s, transform .15s; }
+.nv[aria-pressed="true"] { opacity: 1; border-color: var(--ink); }
+.nv:active { transform: scale(.97); }
+.nv b { font-size: 1.3rem; line-height: 1.1; }
+.nv span { font-size: .85rem; }
+.nv.A { background: linear-gradient(160deg, #ffa347, #ea6a0c); color: #3a1500; }
+.nv.B { background: linear-gradient(160deg, #9be85c, #2f8a36); color: #0d2a09; }
+.nv.C { background: linear-gradient(160deg, #8a5ce0, #3a1c78); color: #fff; }
+.nv.X { background: linear-gradient(160deg, #3a2b40, #0d0a10); color: #ffd2d8; box-shadow: inset 0 0 0 2px #b3122b; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--night-3); border-radius: 999px; padding: 8px 14px; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--night); border-color: var(--ink); }
+.modos { display: grid; gap: 10px; }
+.modo { border: 2px solid var(--line); background: var(--night-3); border-radius: 16px; padding: 12px 14px; text-align: left; display: grid; gap: 2px; }
+.modo b { font-size: 1.1rem; }
+.modo span { color: var(--muted); font-size: .9rem; }
+.modo[aria-pressed="true"] { border-color: var(--pumpkin); background: #3a2416; }
+.modo[aria-pressed="true"] span { color: #ffd9b8; }
+
+.equipos { display: grid; gap: 8px; }
+.eq-row { display: flex; gap: 8px; align-items: center; }
+.eq-row .dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.eq-row input { flex: 1; min-width: 0; background: var(--night); border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; }
+.eq-row button { border: 0; background: none; color: var(--muted); font-size: 1.3rem; padding: 4px 8px; }
+.linkish { background: none; border: 0; color: var(--gold); text-decoration: underline; text-underline-offset: 3px; padding: 0; font-weight: 500; justify-self: start; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: .8rem; color: var(--muted); }
+.field select { background: var(--night); border: 1px solid var(--line); border-radius: 12px; padding: 10px; width: 100%; }
+.big { border: 0; border-radius: 16px; padding: 15px 22px; font-size: 1.2rem; font-weight: 700; background: var(--pumpkin); color: #2a0f00; box-shadow: 0 5px 0 #8a3600; width: 100%; }
+.big:active { transform: translateY(3px); box-shadow: 0 2px 0 #8a3600; }
+.big.verde { background: var(--good); color: #062a12; box-shadow: 0 5px 0 #1d7a3d; }
+.big.gris { background: var(--night-3); color: var(--ink); box-shadow: 0 5px 0 #0c0814; border: 1px solid var(--line); }
+.big.rojo { background: var(--blood); color: #2a0008; box-shadow: 0 5px 0 #8a1028; }
+.big:disabled { opacity: .4; }
+.nota { color: var(--muted); font-size: .85rem; margin: 0; }
+.cuenta { color: var(--muted); font-size: .9rem; text-align: center; }
+
+/* marcador */
+.marcador { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.marcador::-webkit-scrollbar { display: none; }
+.eq { flex: 1 0 auto; min-width: 92px; border-radius: 14px; padding: 6px 12px; background: var(--night-2); border: 2px solid var(--line); display: grid; justify-items: center; text-align: center; }
+.eq .n { font-size: .8rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+.eq .p { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
+.eq.turno { border-color: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent); }
+.eq .p.sube { animation: sube .5s; }
+@keyframes sube { 40% { transform: scale(1.5); color: var(--good); } }
+
+/* juego */
+.juego { display: grid; gap: 14px; }
+.barra { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.reloj { position: relative; width: 74px; height: 74px; flex: none; }
+.reloj svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.reloj .t { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.5rem; font-weight: 700; }
+.reloj.poco .t { color: var(--blood); animation: late 1s infinite; }
+@keyframes late { 50% { transform: scale(1.15); } }
+.info { flex: 1; min-width: 0; }
+.info .q { font-size: .8rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.info .w { font-size: 1.15rem; font-weight: 600; }
+.valor { text-align: center; background: var(--night-2); border: 1px solid var(--line); border-radius: 14px; padding: 6px 12px; }
+.valor b { display: block; font-size: 1.7rem; line-height: 1; color: var(--gold); }
+.valor span { font-size: .75rem; color: var(--muted); }
+
+.pistas-juego { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pj { background: #fffaf0; color: #241a33; border-radius: 16px; padding: 12px 14px 12px 12px; display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center;
+  animation: entra .35s ease-out; border-left: 8px solid var(--nc); }
+.pj .pt { width: 44px; height: 44px; border-radius: 50%; background: var(--nc); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 1.3rem; }
+.pj .en { font-size: clamp(1.05rem, 3.6vw, 1.45rem); font-weight: 500; line-height: 1.25; }
+.pj .es { display: block; font-style: italic; color: #5d5070; font-size: .92em; margin-top: 2px; }
+.pj.vieja { opacity: .6; }
+.pj.vieja .en { font-size: 1rem; }
+@keyframes entra { from { opacity: 0; transform: translateY(12px); } }
+.acciones { display: grid; gap: 10px; }
+.acciones .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quien { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+.quien button { border: 0; border-radius: 14px; padding: 14px 10px; font-weight: 700; font-size: 1.05rem; color: #fff; background: var(--c); box-shadow: 0 4px 0 rgba(0,0,0,.35); }
+
+.solucion { display: grid; grid-template-columns: minmax(0, 330px); justify-content: center; gap: 12px; }
+.resultado { text-align: center; font-size: 1.3rem; font-weight: 700; }
+.resultado.ok { color: var(--good); }
+.resultado.no { color: var(--blood); }
+
+/* modo I am */
+.iam { display: grid; grid-template-columns: minmax(0, 330px); justify-content: center; gap: 12px; }
+.iam .ayuda { background: var(--night-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; font-size: .95rem; }
+.iam .ayuda li { margin: 4px 0; }
+.iam .ayuda .es { color: var(--muted); font-style: italic; }
+.pase { text-align: center; display: grid; gap: 14px; justify-items: center; padding: 30px 10px; }
+.pase .grande { font-family: var(--display); font-size: clamp(2.2rem, 9vw, 3.4rem); line-height: 1; color: var(--c); }
+.pase p { max-width: 420px; color: var(--muted); margin: 0; }
+
+/* galería */
+.filtros { display: grid; gap: 10px; margin-bottom: 14px; }
+.filtros input { background: var(--night-2); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; width: 100%; }
+.galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+.galeria button { border: 0; padding: 0; background: none; border-radius: 4%; }
+.visor { position: fixed; inset: 0; background: rgba(10, 6, 18, .92); display: grid; place-items: center; padding: 16px; z-index: 10; }
+.visor .caja { width: min(100%, 380px, calc((100vh - 110px) * 0.709)); display: grid; gap: 12px; }
+.visor .fila { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.visor .fila button { border: 1px solid var(--line); background: var(--night-2); border-radius: 12px; padding: 10px; font-weight: 600; }
+
+/* final */
+.final { text-align: center; display: grid; gap: 16px; justify-items: center; padding: 20px 0; }
+.final .grande { font-family: var(--display); font-size: clamp(2.6rem, 11vw, 4.4rem); color: var(--gold); line-height: 1; }
+.podio { display: grid; gap: 8px; width: min(100%, 420px); }
+.podio div { display: flex; justify-content: space-between; background: var(--night-2); border: 1px solid var(--line); border-left: 8px solid var(--c); border-radius: 12px; padding: 10px 14px; font-size: 1.1rem; }
+.flota { position: fixed; pointer-events: none; font-size: 30px; animation: cae linear forwards; z-index: 20; }
+@keyframes cae { to { transform: translateY(110vh) rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap bloqueado">
+  <header class="top">
+    <button class="brand" id="home" aria-label="Inicio">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 20c-4-10 2-16 8-16" stroke="#3d8a2e" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="60" rx="42" ry="34" fill="#f28c28" stroke="#2b1d3a" stroke-width="4"/><path d="M50 27v66M30 32c-8 14-8 42 0 56M70 32c8 14 8 42 0 56" stroke="#c4610f" stroke-width="3" fill="none"/><path d="M30 52l10-8 6 10zM70 52l-10-8-6 10z" fill="#2b1d3a"/><path d="M30 68q20 16 40 0l-6 4-4-4-5 5-5-5-5 5-5-5-4 4z" fill="#2b1d3a"/></svg>
+      <span><h1>Who Am <span>I?</span></h1><small>Halloween · ¿Quién soy?</small></span>
+    </button>
+    <button class="icon-btn" id="btnGaleria">Cartas</button>
+  </header>
+
+  <!-- PANTALLA: configuración -->
+  <main id="pSetup">
+    <div class="setup">
+      <div class="panel">
+        <section>
+          <h2 class="sec">Niveles · Levels</h2>
+          <div class="niveles" id="niveles"></div>
+        </section>
+        <section>
+          <h2 class="sec">Modo de juego</h2>
+          <div class="modos" id="modos">
+            <button class="modo" data-modo="pistas" aria-pressed="true"><b>🔎 Pistas · Clues</b><span>Se leen las pistas de 5 a 1 puntos. Responde cualquiera; tocas el equipo que acierta.</span></button>
+            <button class="modo" data-modo="iam" aria-pressed="false"><b>🎭 «I am…»</b><span>Por turnos: un alumno mira el móvil y se describe en primera persona. Su equipo adivina todas las que pueda antes de que acabe el tiempo.</span></button>
+          </div>
+        </section>
+        <section>
+          <h2 class="sec">Idioma de las pistas</h2>
+          <div class="chips" id="idioma">
+            <button class="chip" data-v="en" aria-pressed="false">English</button>
+            <button class="chip" data-v="ambos" aria-pressed="true">English + Español</button>
+            <button class="chip" data-v="es" aria-pressed="false">Español</button>
+          </div>
+        </section>
+        <section>
+          <h2 class="sec">Tipos de carta</h2>
+          <div class="chips" id="tipos"></div>
+        </section>
+      </div>
+      <div class="panel">
+        <section>
+          <h2 class="sec">Equipos · Teams</h2>
+          <div class="equipos" id="equipos"></div>
+          <p style="margin:10px 0 0"><button class="linkish" id="masEquipo">+ Añadir equipo</button></p>
+        </section>
+        <section class="grid2">
+          <div class="field"><label for="tiempo">Cronómetro</label>
+            <select id="tiempo"><option value="0">Sin tiempo</option><option value="30">30 s</option><option value="45">45 s</option><option value="60" selected>60 s</option><option value="90">90 s</option><option value="120">2 min</option></select></div>
+          <div class="field"><label for="meta">Gana quien llegue a</label>
+            <select id="meta"><option value="0">Sin límite</option><option value="20">20 puntos</option><option value="30" selected>30 puntos</option><option value="50">50 puntos</option><option value="100">100 puntos</option></select></div>
+        </section>
+        <p class="nota" id="ayudaTiempo"></p>
+        <button class="big" id="jugar">¡Jugar! · Play</button>
+        <div class="cuenta" id="cuenta"></div>
+        <button class="linkish" id="continuar" hidden>Continuar la partida anterior</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- PANTALLA: juego -->
+  <main id="pJuego" hidden>
+    <div class="juego">
+      <div class="marcador" id="marcador"></div>
+      <div id="escena"></div>
+    </div>
+  </main>
+
+  <!-- PANTALLA: galería -->
+  <main id="pGaleria" hidden>
+    <div class="filtros">
+      <input id="buscar" type="search" placeholder="Buscar en inglés o español… · Search" aria-label="Buscar">
+      <div class="chips" id="gNiveles"></div>
+    </div>
+    <div class="cuenta" id="gCuenta" style="margin-bottom:10px"></div>
+    <div class="galeria" id="galeria"></div>
+  </main>
+</div>
+<div class="visor" id="visor" hidden></div>
+
+
+<style>
+  .lock { min-height: 90vh; display: grid; place-items: center; padding: 24px 0; }
+  .lock form { width: min(100%, 360px); display: grid; gap: 14px; text-align: center; }
+  .lock h1 { font-family: var(--display); font-weight: 400; font-size: 3rem; line-height: 1; margin: 0; color: var(--pumpkin); text-shadow: 0 3px 0 #6b2a00; }
+  .lock h1 span { color: var(--slime); text-shadow: 0 3px 0 #1b4a12; }
+  .lock p { color: var(--muted); margin: 0; }
+  .lock input[type=password] { font: 600 17px/1.2 var(--body); padding: 14px 12px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--night-2); color: var(--ink); text-align: center; letter-spacing: .08em; }
+  .lock label { display: flex; gap: 8px; justify-content: center; align-items: center; color: var(--muted); font-size: 14px; }
+  .lock .err { color: var(--blood); min-height: 1.4em; }
+  .lock .install { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 12px; }
+</style>
+<div class="lock" id="lock" hidden>
+  <form id="lockForm" autocomplete="off">
+    <h1>Who Am <span>I?</span></h1>
+    <p>Escribe la contraseña para abrir las cartas.<br>Enter the password to unlock the cards.</p>
+    <input id="pw" type="password" autocapitalize="none" spellcheck="false" placeholder="xxxx-xxxx-xxxx" aria-label="Contraseña">
+    <label><input id="remember" type="checkbox" checked> Recordar en este dispositivo</label>
+    <button class="big" type="submit" id="unlock">Entrar</button>
+    <div class="err" id="err" role="alert"></div>
+    <div class="install">Para instalarla: en Android, menú ⋮ → «Instalar aplicación». En iPhone, botón Compartir → «Añadir a pantalla de inicio».</div>
+  </form>
+</div>
+<script src="carta.js"></script>
+<script>
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function descifrar(pw) {
+  const pkg = await (await fetch("datos.enc")).json();
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(pkg.salt), iterations: pkg.iter, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(pkg.iv) }, key, b64(pkg.data));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+function arrancar(d) {
+  window.CARTAS = d.cartas;
+  document.getElementById("lock").remove();
+  document.querySelectorAll(".bloqueado").forEach(e => e.classList.remove("bloqueado"));
+  iniciar();
+}
+async function probar(pw, guardar) {
+  const d = await descifrar(pw.trim());
+  if (guardar) { try { localStorage.setItem("whoami-pw", pw.trim()); } catch {} }
+  arrancar(d);
+}
+document.getElementById("lockForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = document.getElementById("err"), btn = document.getElementById("unlock");
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Abriendo…";
+  try { await probar(document.getElementById("pw").value, document.getElementById("remember").checked); }
+  catch { err.textContent = "Contraseña incorrecta · Wrong password"; }
+  btn.disabled = false; btn.textContent = "Entrar";
+});
+(async () => {
+  let saved = null; try { saved = localStorage.getItem("whoami-pw"); } catch {}
+  if (saved) { try { await probar(saved, false); return; } catch {} }
+  document.getElementById("lock").hidden = false;
+})();
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(r => r.update()));
+  let recargada = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!recargada) { recargada = true; location.reload(); } });
+}
+</script>
+
+<script>
+function iniciar() {
+const $ = s => document.querySelector(s);
+const esc = WHO.esc, cap = WHO.cap;
+const CARTAS = WHO.numerar(window.CARTAS.slice());
+const COLORES_EQ = ["#ff8a1f", "#86dc47", "#b28bff", "#4ac6ff", "#ff4d6d", "#e9c46a"];
+const NOMBRES_EQ = ["Pumpkins", "Zombies", "Ghosts", "Bats", "Vampires", "Witches"];
+const NIVEL_COLOR = { A: "#ef7a12", B: "#3f9a37", C: "#6a3fbf", X: "#b3122b" };
+const GRUPOS_TIPO = {
+  criaturas: { t: "👻 Criaturas", tipos: ["criatura", "personaje"] },
+  animales: { t: "🦇 Animales", tipos: ["animal"] },
+  objetos: { t: "🕯️ Objetos y lugares", tipos: ["objeto", "lugar", "naturaleza", "concepto", "comida"] },
+  famosos: { t: "⭐ Famosos", tipos: ["famoso"] },
+};
+
+const guardar = (k, v) => { try { localStorage.setItem("whoami-" + k, JSON.stringify(v)); } catch {} };
+const leer = (k, d) => { try { const v = JSON.parse(localStorage.getItem("whoami-" + k)); return v ?? d; } catch { return d; } };
+
+const cfg = Object.assign({
+  niveles: ["A"], modo: "pistas", idioma: "ambos", tipos: Object.keys(GRUPOS_TIPO),
+  equipos: ["Pumpkins", "Zombies"], tiempo: 60, meta: 30,
+}, leer("cfg", {}));
+let partida = null;   // { mazo:[ids], pos, puntos:[], turno, ... }
+let reloj = null;
+
+/* ---------- sonido ---------- */
+let audio;
+function pitido(f = 660, d = .12, tipo = "sine", vol = .2) {
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audio.createOscillator(), g = audio.createGain();
+    o.type = tipo; o.frequency.value = f; g.gain.value = vol;
+    g.gain.exponentialRampToValueAtTime(.0001, audio.currentTime + d);
+    o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + d);
+  } catch {}
+}
+const sonidoBien = () => { pitido(660, .1); setTimeout(() => pitido(990, .18), 100); };
+const sonidoMal = () => pitido(180, .3, "sawtooth", .12);
+const sonidoFin = () => { [0, 180, 360].forEach((t, i) => setTimeout(() => pitido(300 - i * 60, .3, "square", .12), t)); try { navigator.vibrate?.([200, 100, 200]); } catch {} };
+
+/* ---------- configuración ---------- */
+function pintarSetup() {
+  const cuenta = n => CARTAS.filter(c => c.nivel === n).length;
+  $("#niveles").innerHTML = Object.entries(WHO.NIVELES).map(([k, n]) =>
+    `<button class="nv ${k}" data-n="${k}" aria-pressed="${cfg.niveles.includes(k)}"><b>${n.code === "X" ? "💀 Impossible" : n.code}</b><span>${n.en} · ${n.es}</span><span>${cuenta(k)} cartas</span></button>`).join("");
+  $("#tipos").innerHTML = Object.entries(GRUPOS_TIPO).map(([k, g]) =>
+    `<button class="chip" data-t="${k}" aria-pressed="${cfg.tipos.includes(k)}">${g.t}</button>`).join("");
+  document.querySelectorAll("#modos .modo").forEach(b => b.setAttribute("aria-pressed", b.dataset.modo === cfg.modo));
+  document.querySelectorAll("#idioma .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === cfg.idioma));
+  $("#equipos").innerHTML = cfg.equipos.map((e, i) => `<div class="eq-row"><span class="dot" style="background:${COLORES_EQ[i]}"></span>
+    <input value="${esc(e)}" data-i="${i}" maxlength="20" aria-label="Equipo ${i + 1}">
+    ${cfg.equipos.length > 1 ? `<button data-quitar="${i}" aria-label="Quitar equipo">×</button>` : ""}</div>`).join("");
+  $("#masEquipo").hidden = cfg.equipos.length >= 6;
+  $("#tiempo").value = String(cfg.tiempo);
+  $("#meta").value = String(cfg.meta);
+  $("#ayudaTiempo").textContent = cfg.modo === "pistas"
+    ? "En «Pistas» el cronómetro es el tiempo total para cada carta."
+    : "En «I am…» el cronómetro es la duración del turno de cada equipo.";
+  const n = mazoFiltrado().length;
+  $("#cuenta").textContent = `${n} cartas en juego`;
+  $("#jugar").disabled = n === 0;
+  $("#continuar").hidden = !leer("partida", null);
+  guardar("cfg", cfg);
+}
+function mazoFiltrado() {
+  const tipos = cfg.tipos.flatMap(k => GRUPOS_TIPO[k].tipos);
+  return CARTAS.filter(c => cfg.niveles.includes(c.nivel) && tipos.includes(c.tipo));
+}
+$("#niveles").addEventListener("click", e => {
+  const b = e.target.closest("[data-n]"); if (!b) return;
+  const k = b.dataset.n;
+  cfg.niveles = cfg.niveles.includes(k) ? cfg.niveles.filter(x => x !== k) : [...cfg.niveles, k];
+  pintarSetup();
+});
+$("#tipos").addEventListener("click", e => {
+  const b = e.target.closest("[data-t]"); if (!b) return;
+  const k = b.dataset.t;
+  cfg.tipos = cfg.tipos.includes(k) ? cfg.tipos.filter(x => x !== k) : [...cfg.tipos, k];
+  pintarSetup();
+});
+$("#modos").addEventListener("click", e => { const b = e.target.closest("[data-modo]"); if (b) { cfg.modo = b.dataset.modo; pintarSetup(); } });
+$("#idioma").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) { cfg.idioma = b.dataset.v; pintarSetup(); } });
+$("#equipos").addEventListener("input", e => { if (e.target.dataset.i != null) { cfg.equipos[+e.target.dataset.i] = e.target.value; guardar("cfg", cfg); } });
+$("#equipos").addEventListener("click", e => { const b = e.target.closest("[data-quitar]"); if (b) { cfg.equipos.splice(+b.dataset.quitar, 1); pintarSetup(); } });
+$("#masEquipo").addEventListener("click", () => { cfg.equipos.push(NOMBRES_EQ[cfg.equipos.length] || `Team ${cfg.equipos.length + 1}`); pintarSetup(); });
+$("#tiempo").addEventListener("change", e => { cfg.tiempo = +e.target.value; guardar("cfg", cfg); });
+$("#meta").addEventListener("change", e => { cfg.meta = +e.target.value; guardar("cfg", cfg); });
+
+/* ---------- navegación ---------- */
+function ver(p) {
+  ["pSetup", "pJuego", "pGaleria"].forEach(id => $("#" + id).hidden = id !== p);
+  $("#btnGaleria").textContent = p === "pGaleria" ? "← Volver" : "Cartas";
+  window.scrollTo(0, 0);
+}
+$("#home").addEventListener("click", () => {
+  if (partida && !partida.terminada && !confirm("¿Salir al menú? La partida se guarda y podrás continuarla.")) return;
+  pararReloj(); ver("pSetup"); pintarSetup();
+});
+$("#btnGaleria").addEventListener("click", () => {
+  if (!$("#pGaleria").hidden) { ver(partida && !partida.terminada ? "pJuego" : "pSetup"); if (!partida || partida.terminada) pintarSetup(); return; }
+  pararReloj(); pintarGaleria(); ver("pGaleria");
+});
+
+/* ---------- partida ---------- */
+function barajar(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const porId = Object.fromEntries(CARTAS.map(c => [c.id, c]));
+
+$("#jugar").addEventListener("click", () => {
+  cfg.equipos = cfg.equipos.map((e, i) => e.trim() || NOMBRES_EQ[i]);
+  partida = {
+    modo: cfg.modo, idioma: cfg.idioma, tiempo: cfg.tiempo, meta: cfg.meta,
+    equipos: cfg.equipos.map((n, i) => ({ n, c: COLORES_EQ[i], p: 0 })),
+    mazo: barajar(mazoFiltrado().map(c => c.id)), pos: 0, turno: 0, fase: "inicio",
+  };
+  guardar("cfg", cfg);
+  empezar();
+});
+$("#continuar").addEventListener("click", () => { partida = leer("partida", null); if (partida) { partida.fase = partida.modo === "iam" ? "pase" : "carta"; empezar(); } });
+
+function empezar() { ver("pJuego"); if (partida.modo === "pistas") nuevaCartaPistas(); else pantallaPase(); }
+function guardarPartida() { guardar("partida", partida.terminada ? null : partida); }
+function cartaActual() {
+  if (partida.pos >= partida.mazo.length) { partida.mazo = barajar(partida.mazo); partida.pos = 0; }
+  return porId[partida.mazo[partida.pos]];
+}
+
+function pintarMarcador(sube) {
+  $("#marcador").innerHTML = partida.equipos.map((e, i) =>
+    `<div class="eq ${partida.modo === "iam" && i === partida.turno ? "turno" : ""}" style="--c:${e.c}"><span class="n">${esc(e.n)}</span><span class="p ${i === sube ? "sube" : ""}">${e.p}</span></div>`).join("");
+}
+function sumar(i, pts) {
+  partida.equipos[i].p += pts;
+  pintarMarcador(i);
+  guardarPartida();
+  return partida.meta && partida.equipos[i].p >= partida.meta;
+}
+
+/* reloj */
+function pararReloj() { if (reloj) { clearInterval(reloj.id); reloj = null; } }
+function arrancarReloj(seg, alAcabar) {
+  pararReloj();
+  if (!seg) return;
+  const fin = Date.now() + seg * 1000;
+  reloj = { fin, seg, alAcabar, id: setInterval(tic, 200) };
+  tic();
+}
+function tic() {
+  if (!reloj) return;
+  const el = $("#reloj"); const q = Math.max(0, (reloj.fin - Date.now()) / 1000);
+  const s = Math.ceil(q);
+  if (el) {
+    el.querySelector(".t").textContent = s;
+    el.querySelector(".arco").style.strokeDashoffset = 226 * (1 - q / reloj.seg);
+    el.classList.toggle("poco", s <= 10);
+  }
+  if (s <= 5 && s > 0 && s !== reloj.ult) { reloj.ult = s; pitido(880, .05, "sine", .08); }
+  if (q <= 0) { const f = reloj.alAcabar; pararReloj(); sonidoFin(); f(); }
+}
+const relojHtml = () => partida.tiempo ? `<div class="reloj" id="reloj"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#2a2140" stroke-width="7"/><circle class="arco" cx="40" cy="40" r="36" fill="none" stroke="#ff8a1f" stroke-width="7" stroke-dasharray="226" stroke-dashoffset="0" stroke-linecap="round"/></svg><span class="t">${partida.tiempo}</span></div>` : "";
+
+function textoPista(c, i, clase = "") {
+  const en = c.pistas.en[i], es = c.pistas.es[i], id = partida.idioma;
+  const cuerpo = id === "es" ? `<span class="en">${esc(es)}</span>` : `<span class="en">${esc(en)}${id === "ambos" ? `<span class="es">${esc(es)}</span>` : ""}</span>`;
+  return `<li class="pj ${clase}" style="--nc:${NIVEL_COLOR[c.nivel]}"><span class="pt">${5 - i}</span>${cuerpo}</li>`;
+}
+
+/* ===== Modo Pistas ===== */
+function nuevaCartaPistas() {
+  partida.fase = "carta"; partida.vistas = 1;
+  guardarPartida(); pintarCartaPistas(); arrancarReloj(partida.tiempo, () => resolverPistas(null));
+}
+function pintarCartaPistas() {
+  const c = cartaActual(), v = partida.vistas;
+  pintarMarcador();
+  const lista = Array.from({ length: v }, (_, i) => textoPista(c, i, i < v - 1 ? "vieja" : "")).reverse().join("");
+  $("#escena").innerHTML = `
+    <div class="barra">${relojHtml()}
+      <div class="info"><div class="q">Carta ${partida.pos + 1} · ${WHO.NIVELES[c.nivel].code} · ${WHO.TIPOS[c.tipo][0]}</div><div class="w">Who am I? · ¿Quién soy?</div></div>
+      <div class="valor"><b>${6 - v}</b><span>puntos</span></div></div>
+    <ol class="pistas-juego">${lista}</ol>
+    <div class="acciones">
+      <button class="big gris" id="otra" ${v >= 5 ? "disabled" : ""}>Siguiente pista · Next clue (${5 - v} pts)</button>
+      <h2 class="sec" style="margin:4px 0 0">¿Quién lo ha adivinado? · Who got it?</h2>
+      <div class="quien">${partida.equipos.map((e, i) => `<button data-eq="${i}" style="--c:${e.c}">${esc(e.n)} +${6 - v}</button>`).join("")}</div>
+      <button class="big rojo" id="nadie">Nadie · Nobody — ver solución</button>
+    </div>`;
+  $("#otra").onclick = () => { partida.vistas++; guardarPartida(); pitido(520, .06); pintarCartaPistas(); tic(); };
+  $("#nadie").onclick = () => resolverPistas(null);
+  document.querySelectorAll("[data-eq]").forEach(b => b.onclick = () => resolverPistas(+b.dataset.eq));
+}
+function resolverPistas(eq) {
+  pararReloj();
+  const c = cartaActual(), pts = 6 - partida.vistas;
+  let gana = false;
+  if (eq != null) { sonidoBien(); gana = sumar(eq, pts); } else sonidoMal();
+  partida.pos++; partida.fase = "solucion"; guardarPartida();
+  $("#escena").innerHTML = `<div class="solucion">
+    <div class="resultado ${eq != null ? "ok" : "no"}">${eq != null ? `✓ ${esc(partida.equipos[eq].n)} +${pts}` : "Nadie lo ha adivinado"}</div>
+    ${WHO.anverso(c)}
+    <button class="big" id="sig">${gana ? "🏆 Ver ganador" : "Siguiente carta · Next card"}</button></div>`;
+  pintarMarcador(eq);
+  $("#sig").onclick = () => gana ? finPartida() : nuevaCartaPistas();
+}
+
+/* ===== Modo I am… ===== */
+function pantallaPase() {
+  pararReloj();
+  partida.fase = "pase"; guardarPartida(); pintarMarcador();
+  const e = partida.equipos[partida.turno];
+  $("#escena").innerHTML = `<div class="pase" style="--c:${e.c}">
+    <div class="nota">Turno de · Turn of</div>
+    <div class="grande">${esc(e.n)}</div>
+    <p>Pasad el móvil a quien va a describir. ¡Que su equipo no vea la pantalla! Describe la carta en primera persona: <i>“I am…, I live…, I can…”</i> sin decir su nombre.</p>
+    <p>Acierto = 5 puntos, −1 por cada pista que mires. «Pasar» no suma.</p>
+    <button class="big verde" id="go" style="max-width:340px">▶ Empezar turno${partida.tiempo ? ` (${partida.tiempo} s)` : ""}</button>
+  </div>`;
+  $("#go").onclick = () => { partida.fase = "turno"; partida.aciertosTurno = 0; arrancarReloj(partida.tiempo, finTurno); cartaIam(); };
+}
+function cartaIam() {
+  const c = cartaActual();
+  partida.ayudas = 0; guardarPartida();
+  pintarIam(c);
+}
+function pintarIam(c) {
+  const a = partida.ayudas;
+  const ayuda = a ? `<ol class="ayuda" reversed>${c.pistas.en.slice(5 - a).map((p, k) => `<li>${esc(p)}${partida.idioma !== "en" ? ` <span class="es">· ${esc(c.pistas.es[5 - a + k])}</span>` : ""}</li>`).join("")}</ol>` : "";
+  $("#escena").innerHTML = `
+    <div class="barra">${relojHtml()}
+      <div class="info"><div class="q">${esc(partida.equipos[partida.turno].n)} · aciertos ${partida.aciertosTurno}</div><div class="w">Describe: “I am…”</div></div>
+      <div class="valor"><b>${Math.max(1, 5 - a)}</b><span>puntos</span></div></div>
+    <div class="iam">
+      ${WHO.anverso(c)}
+      ${ayuda}
+      <div class="acciones">
+        <button class="big verde" id="ok">✓ ¡Acertado! · Got it</button>
+        <div class="fila"><button class="big gris" id="pista" ${a >= 5 ? "disabled" : ""}>💡 Pista (−1)</button><button class="big rojo" id="pasar">Pasar · Skip</button></div>
+        ${partida.tiempo ? "" : `<button class="linkish" id="finTurno">Terminar turno</button>`}
+      </div>
+    </div>`;
+  tic();
+  $("#ok").onclick = () => {
+    sonidoBien(); partida.aciertosTurno++;
+    const gana = sumar(partida.turno, Math.max(1, 5 - a));
+    partida.pos++;
+    if (gana) { pararReloj(); return finPartida(); }
+    cartaIam();
+  };
+  $("#pista").onclick = () => { partida.ayudas++; guardarPartida(); pintarIam(c); };
+  $("#pasar").onclick = () => { sonidoMal(); partida.pos++; cartaIam(); };
+  const ft = $("#finTurno"); if (ft) ft.onclick = finTurno;
+}
+function finTurno() {
+  pararReloj();
+  const c = cartaActual(), e = partida.equipos[partida.turno];
+  partida.pos++;
+  partida.turno = (partida.turno + 1) % partida.equipos.length;
+  guardarPartida();
+  $("#escena").innerHTML = `<div class="pase" style="--c:${e.c}">
+    <div class="grande">⏰ Time's up!</div>
+    <p><b>${esc(e.n)}</b>: ${partida.aciertosTurno} acierto${partida.aciertosTurno === 1 ? "" : "s"} este turno.</p>
+    <p>La última carta era: <b>${esc(cap(c.en))}</b> · ${esc(c.es)}</p>
+    <button class="big" id="sig" style="max-width:340px">Siguiente equipo · Next team</button></div>`;
+  pintarMarcador();
+  $("#sig").onclick = pantallaPase;
+}
+
+/* final */
+function finPartida() {
+  pararReloj();
+  partida.terminada = true; guardarPartida();
+  const orden = partida.equipos.slice().sort((a, b) => b.p - a.p);
+  $("#escena").innerHTML = `<div class="final">
+    <div class="nota">🏆 Winner · Ganador</div>
+    <div class="grande" style="color:${orden[0].c}">${esc(orden[0].n)}</div>
+    <div class="podio">${orden.map((e, i) => `<div style="--c:${e.c}"><span>${i + 1}. ${esc(e.n)}</span><b>${e.p}</b></div>`).join("")}</div>
+    <button class="big" id="otraVez" style="max-width:340px">Jugar otra vez</button></div>`;
+  $("#otraVez").onclick = () => { ver("pSetup"); pintarSetup(); };
+  sonidoBien(); setTimeout(sonidoBien, 250);
+  const emojis = ["🎃", "👻", "🦇", "🍬", "🕷️", "💀", "🍭"];
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement("span");
+    s.className = "flota"; s.textContent = emojis[i % emojis.length];
+    s.style.left = Math.random() * 100 + "vw"; s.style.top = "-40px";
+    s.style.animationDuration = 2.5 + Math.random() * 3 + "s"; s.style.animationDelay = Math.random() * 1.5 + "s";
+    document.body.appendChild(s); setTimeout(() => s.remove(), 7000);
+  }
+}
+
+/* ---------- galería ---------- */
+let gNiv = ["A", "B", "C", "X"];
+function pintarGaleria() {
+  $("#gNiveles").innerHTML = Object.entries(WHO.NIVELES).map(([k, n]) =>
+    `<button class="chip" data-n="${k}" aria-pressed="${gNiv.includes(k)}">${n.code === "X" ? "Impossible" : n.code}</button>`).join("");
+  const q = $("#buscar").value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const cs = CARTAS.filter(c => gNiv.includes(c.nivel) && (!q || norm(c.en + " " + c.es + " " + (c.obra || "")).includes(q)));
+  $("#gCuenta").textContent = `${cs.length} cartas`;
+  $("#galeria").innerHTML = cs.map(c => `<button data-id="${c.id}" aria-label="${esc(c.en)}">${WHO.anverso(c)}</button>`).join("");
+}
+$("#gNiveles").addEventListener("click", e => {
+  const b = e.target.closest("[data-n]"); if (!b) return;
+  const k = b.dataset.n; gNiv = gNiv.includes(k) ? gNiv.filter(x => x !== k) : [...gNiv, k]; pintarGaleria();
+});
+$("#buscar").addEventListener("input", pintarGaleria);
+$("#galeria").addEventListener("click", e => { const b = e.target.closest("[data-id]"); if (b) abrirVisor(b.dataset.id); });
+function abrirVisor(id) {
+  let cara = 0;
+  const lista = [...document.querySelectorAll("#galeria [data-id]")].map(b => b.dataset.id);
+  const pintar = () => {
+    const c = porId[id];
+    $("#visor").innerHTML = `<div class="caja">${cara ? WHO.reverso(c) : WHO.anverso(c)}
+      <div class="fila"><button id="vAnt">‹</button><button id="vGira">${cara ? "Ver dibujo" : "Ver pistas"}</button><button id="vSig">›</button></div>
+      <button class="big gris" id="vCerrar">Cerrar</button></div>`;
+    const mover = d => { const i = lista.indexOf(id); id = lista[(i + d + lista.length) % lista.length]; cara = 0; pintar(); };
+    $("#vAnt").onclick = () => mover(-1); $("#vSig").onclick = () => mover(1);
+    $("#vGira").onclick = () => { cara = 1 - cara; pintar(); };
+    $("#vCerrar").onclick = () => $("#visor").hidden = true;
+  };
+  pintar(); $("#visor").hidden = false;
+}
+$("#visor").addEventListener("click", e => { if (e.target.id === "visor") $("#visor").hidden = true; });
+addEventListener("keydown", e => { if (e.key === "Escape") $("#visor").hidden = true; });
+
+pintarSetup();
+}
+</script>
+</body>
+</html>

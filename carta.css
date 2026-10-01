@@ -1,0 +1,104 @@
+/* Who Am I? Halloween · diseño de carta (compartido por la app y la versión imprimible).
+   Todas las medidas en cqw: la carta escala sola a cualquier ancho. Proporción A6 (105 × 148). */
+.carta {
+  container-type: inline-size;
+  aspect-ratio: 105 / 148;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  background: #fffaf0;
+  color: #241a33;
+  border-radius: 4% / 2.84%;
+  overflow: hidden;
+  font-family: "Fredoka", system-ui, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  --c: #ef7a12;      /* color del nivel */
+  --c2: #fde3c8;     /* tono claro del nivel */
+  --c3: #8a3a00;     /* tono oscuro del nivel */
+}
+.carta.nivel-B { --c: #3f9a37; --c2: #dff3d3; --c3: #1d5a1c; }
+.carta.nivel-C { --c: #6a3fbf; --c2: #e9defb; --c3: #3a1c78; }
+.carta.nivel-X { --c: #1b1621; --c2: #f4d9dd; --c3: #b3122b; }
+.carta * { box-sizing: border-box; }
+.carta .in {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  border: 2.2cqw solid var(--c);
+  border-radius: 4cqw;
+}
+.carta .top {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--c); color: #fff;
+  padding: 0.6cqw 2.4cqw 1.4cqw;
+  font-weight: 600; font-size: 3.6cqw; letter-spacing: .04em; text-transform: uppercase;
+}
+.carta.nivel-X .top { color: #ffd2d8; }
+.carta .top .lv { font-weight: 700; }
+.carta .top .lv b { font-family: "Creepster", "Fredoka", sans-serif; font-weight: 400; font-size: 5cqw; letter-spacing: .06em; margin-right: 1cqw; }
+
+/* --- anverso --- */
+.carta .arte {
+  margin: 2.5cqw auto 0;
+  width: 56cqw; height: 56cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #fff 0 45%, var(--c2) 75%);
+  box-shadow: inset 0 0 0 0.8cqw var(--c2);
+  flex: none;
+}
+.carta .arte svg { width: 100%; height: 100%; display: block; }
+.carta .nombre { text-align: center; margin-top: 1.5cqw; padding: 0 3cqw; }
+.carta .nombre .en {
+  font-weight: 700; font-size: 8.6cqw; line-height: 1; color: var(--c3);
+  text-wrap: balance;
+}
+.carta .nombre .en.largo { font-size: 6.6cqw; }
+.carta .nombre .en.muylargo { font-size: 5.4cqw; }
+.carta .nombre .es { font-size: 4.6cqw; font-style: italic; color: #5d5070; margin-top: 0.6cqw; }
+.carta .desc { padding: 0 4.5cqw; margin-top: 1.8cqw; font-size: 3.55cqw; line-height: 1.28; text-align: center; }
+.carta .desc p { margin: 0; }
+.carta .desc .es { color: #5d5070; font-style: italic; margin-top: 0.8cqw; font-size: 3.3cqw; }
+.carta .vocab {
+  margin-top: auto; padding: 1.6cqw 3cqw 1.2cqw;
+  display: flex; flex-wrap: wrap; gap: 1cqw; justify-content: center;
+}
+.carta .vocab span {
+  background: var(--c2); color: var(--c3);
+  border-radius: 99px; padding: 0.4cqw 2cqw;
+  font-size: 3.1cqw; font-weight: 500; white-space: nowrap;
+}
+.carta .vocab span i { font-weight: 400; color: #5d5070; }
+.carta .pie {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 5cqw 1.8cqw; font-size: 2.7cqw; color: #8b8098; letter-spacing: .05em;
+}
+.carta .pie .obra { text-align: right; max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* --- reverso --- */
+.carta.reverso .titulo {
+  text-align: center; padding: 2cqw 2cqw 0.6cqw;
+  font-family: "Creepster", "Fredoka", sans-serif; font-size: 9cqw; line-height: 1; color: var(--c3);
+  letter-spacing: .03em;
+}
+.carta.reverso .sub { text-align: center; font-size: 3.4cqw; color: #5d5070; margin-bottom: 1.2cqw; }
+.carta .pistas { list-style: none; margin: 0; padding: 0 3cqw; display: flex; flex-direction: column; gap: 1.1cqw; flex: 1; }
+.carta .pistas li {
+  display: grid; grid-template-columns: 7.5cqw 1fr; gap: 1.8cqw; align-items: center;
+  background: #fff; border: 0.5cqw solid var(--c2); border-radius: 2.4cqw;
+  padding: 1cqw 1.8cqw 1cqw 1.2cqw; flex: 1;
+}
+.carta .pistas .pt {
+  width: 7.5cqw; height: 7.5cqw; border-radius: 50%;
+  background: var(--c); color: #fff; display: grid; place-items: center;
+  font-weight: 700; font-size: 4.2cqw; line-height: 1;
+}
+.carta .pistas .pt small { display: block; font-size: 1.9cqw; font-weight: 500; margin-top: -0.3cqw; }
+.carta .pistas .t { font-size: 3.35cqw; line-height: 1.2; }
+.carta .pistas .t .es { display: block; font-style: italic; color: #5d5070; font-size: 3.05cqw; margin-top: 0.4cqw; }
+.carta.reverso.denso .pistas .t { font-size: 3.05cqw; }
+.carta.reverso.denso .pistas .t .es { font-size: 2.8cqw; }
+.carta.reverso .sol {
+  text-align: center; transform: rotate(180deg);
+  font-size: 3cqw; color: #8b8098; padding: 1.4cqw 2cqw 1.6cqw;
+}
+.carta.reverso .sol b { color: var(--c3); }
