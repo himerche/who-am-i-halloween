@@ -169,6 +169,25 @@ h2.sec { font-weight: 700; font-size: .78rem; letter-spacing: .14em; text-transf
 .flota { position: fixed; pointer-events: none; font-size: 30px; animation: cae linear forwards; z-index: 20; }
 @keyframes cae { to { transform: translateY(110vh) rotate(360deg); } }
 </style>
+<script>
+(() => {
+  const app = "who-am-i", cola = [];
+  window.goatcounter = window.goatcounter || {};
+  let intentos = 0;
+  function vaciar() {
+    if (!window.goatcounter.count) { if (intentos++ < 30) setTimeout(vaciar, 1000); return; }
+    while (cola.length) {
+      const ev = cola.shift();
+      try { window.goatcounter.count({ path: app + " · " + ev, title: ev, event: true }); } catch {}
+    }
+  }
+  window.contar = ev => { cola.push(ev); vaciar(); };
+  const instalada = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  window.contar(instalada ? "abierta como app instalada" : "abierta en el navegador");
+  addEventListener("appinstalled", () => window.contar("instalada en un dispositivo"));
+})();
+</script>
+<script data-goatcounter="https://himerche.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="wrap bloqueado">
@@ -274,6 +293,7 @@ h2.sec { font-weight: 700; font-size: .78rem; letter-spacing: .14em; text-transf
 </div>
 <script src="carta.js"></script>
 <script>
+const cuenta = ev => { try { window.contar && window.contar(ev); } catch {} };
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 async function descifrar(pw) {
   const pkg = await (await fetch("datos.enc")).json();
@@ -298,13 +318,13 @@ document.getElementById("lockForm").addEventListener("submit", async e => {
   e.preventDefault();
   const err = document.getElementById("err"), btn = document.getElementById("unlock");
   err.textContent = ""; btn.disabled = true; btn.textContent = "Abriendo…";
-  try { await probar(document.getElementById("pw").value, document.getElementById("remember").checked); }
-  catch { err.textContent = "Contraseña incorrecta · Wrong password"; }
+  try { await probar(document.getElementById("pw").value, document.getElementById("remember").checked); cuenta("entrada con contraseña"); }
+  catch { err.textContent = "Contraseña incorrecta · Wrong password"; cuenta("contraseña incorrecta"); }
   btn.disabled = false; btn.textContent = "Entrar";
 });
 (async () => {
   let saved = null; try { saved = localStorage.getItem("whoami-pw"); } catch {}
-  if (saved) { try { await probar(saved, false); return; } catch {} }
+  if (saved) { try { await probar(saved, false); cuenta("entrada recordada"); return; } catch {} }
   document.getElementById("lock").hidden = false;
 })();
 if ("serviceWorker" in navigator) {
