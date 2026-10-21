@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spooky Games · Halloween</title>
+<meta name="theme-color" content="#07131c">
+<meta name="robots" content="noindex, nofollow">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icono-192.png">
+<link rel="stylesheet" href="juegos/comun.css">
+<script>
+(() => {
+  const app = "spooky-games", cola = [];
+  window.goatcounter = window.goatcounter || {};
+  let intentos = 0;
+  function vaciar() {
+    if (!window.goatcounter.count) { if (intentos++ < 30) setTimeout(vaciar, 1000); return; }
+    while (cola.length) {
+      const ev = cola.shift();
+      try { window.goatcounter.count({ path: app + " · " + ev, title: ev, event: true }); } catch {}
+    }
+  }
+  window.contar = ev => { cola.push(ev); vaciar(); };
+  window.contar("abierta");
+})();
+</script>
+<script data-goatcounter="https://himerche.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="decor" aria-hidden="true">
+  <div class="luna"></div>
+  <span class="murci">🦇</span><span class="murci b">🦇</span>
+  <svg class="tumbas" viewBox="0 0 1600 220" preserveAspectRatio="none">
+    <path d="M0 220V170q200-40 400-10t420-20 400 10 380-10v80z" fill="#04090e"/>
+    <g fill="#060d14">
+      <path d="M140 175v-60a40 40 0 0 1 80 0v60z"/><path d="M300 180v-40h12v-22h14v22h12v40z"/><path d="M470 178v-48a30 30 0 0 1 60 0v48z"/>
+      <path d="M1080 176v-62a42 42 0 0 1 84 0v62z"/><path d="M1260 178v-44h12v-24h14v24h12v44z"/><path d="M1400 180v-50a32 32 0 0 1 64 0v50z"/>
+      <path d="M760 180c-6-50-4-90 6-130-30 10-50 0-70-20 30 6 50 0 66-14-20-10-30-30-30-50 20 16 40 22 50 20l8-10 8 10c10 2 30-4 50-20 0 20-10 40-30 50 16 14 36 20 66 14-20 20-40 30-70 20 10 40 12 80 6 130z"/>
+    </g>
+  </svg>
+  <div class="niebla"></div><div class="niebla b"></div>
+</div>
+
+<div class="lock" id="lock" hidden>
+  <form id="lockForm" autocomplete="off">
+    <div style="font-size:4rem;line-height:1">🎃👻🦇</div>
+    <h1>Spooky Games</h1>
+    <p>Escribe la contraseña (la misma de <b>Who Am I?</b>).<br>Enter the password.</p>
+    <input id="pw" type="password" autocapitalize="none" spellcheck="false" placeholder="xxxx-xxxx-xxxx" aria-label="Contraseña">
+    <label><input id="remember" type="checkbox" checked> Recordar en este dispositivo</label>
+    <button class="btn verde gigante" type="submit" id="unlock">Entrar</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+</div>
+
+<div class="app bloqueado">
+  <header class="barra">
+    <button class="marca" id="inicio" title="Menú"><span>🎃</span><b>Spooky Games</b></button>
+    <span class="titulo-juego" id="tituloJuego"></span>
+    <span class="esp"></span>
+    <span class="reloj" id="reloj" hidden></span>
+    <button class="ib" id="bSonido" title="Sonido y voz">🔊</button>
+    <button class="ib" id="bMusica" title="Música">🎵</button>
+    <button class="ib" id="bSustos" title="Sustos">👻</button>
+    <button class="ib" id="bGrande" title="Pantalla completa (F)">⛶</button>
+  </header>
+  <main class="escena" id="escena"></main>
+</div>
+
+<script src="juegos/banco.js"></script>
+<script src="juegos/comun.js"></script>
+<script src="juegos/casa.js"></script>
+<script src="juegos/linterna.js"></script>
+<script src="juegos/dice.js"></script>
+<script src="juegos/maker.js"></script>
+<script src="juegos/memoria.js"></script>
+<script>
+// Misma contraseña que Who Am I?: se comprueba descifrando sus cartas (datos.enc).
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function comprobar(pw) {
+  const pkg = await (await fetch("datos.enc")).json();
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(pkg.salt), iterations: pkg.iter, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(pkg.iv) }, key, b64(pkg.data));
+}
+function abrirApp() {
+  document.getElementById("lock").remove();
+  document.querySelectorAll(".bloqueado").forEach(e => e.classList.remove("bloqueado"));
+  J.arrancar();
+}
+async function probar(pw, guardar) {
+  await comprobar(pw.trim());
+  if (guardar) { try { localStorage.setItem("whoami-pw", pw.trim()); } catch {} }
+  abrirApp();
+}
+document.getElementById("lockForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = document.getElementById("err"), btn = document.getElementById("unlock");
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Abriendo…";
+  try { await probar(document.getElementById("pw").value, document.getElementById("remember").checked); window.contar("entrada con contraseña"); }
+  catch { err.textContent = "Contraseña incorrecta · Wrong password"; }
+  btn.disabled = false; btn.textContent = "Entrar";
+});
+(async () => {
+  let saved = null; try { saved = localStorage.getItem("whoami-pw"); } catch {}
+  if (saved) { try { await probar(saved, false); return; } catch {} }
+  document.getElementById("lock").hidden = false;
+})();
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(r => r && r.update()));
+  let recargada = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!recargada) { recargada = true; location.reload(); } });
+}
+</script>
+</body>
+</html>
