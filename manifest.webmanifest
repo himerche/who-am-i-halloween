@@ -25,5 +25,18 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Spooky Games",
+      "short_name": "Spooky Games",
+      "url": "./juegos.html",
+      "icons": [
+        {
+          "src": "icono-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
